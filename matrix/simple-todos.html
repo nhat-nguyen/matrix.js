@@ -1,0 +1,37 @@
+<!-- simple-todos.html -->
+<head>
+  <link href="simple-todos.css" rel="stylesheet">
+  <title>Todo List</title>
+</head>
+
+<body>
+  <div class="container">
+  <header>
+    <h1>Hello there</h1>
+    <form class="new-task">
+      <input type="text" name="row" placeholder="rows" />
+      <input type="text" name="col" placeholder="columns"/>
+      <input type="submit" value="Add Matrix">
+    </form>
+  </header>
+
+    <ul>
+      {{#each matrix}}
+        {{> inputMatrix}}
+      {{/each}}
+    </ul>
+  </div>
+</body>
+
+<template name="inputMatrix">
+  <li class="{{#if checked}}checked{{/if}}">
+    <button class="delete">&times;</button>
+
+    <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
+
+    <span class="text">
+      {{row}}
+      {{col}}
+    </span>
+  </li>
+</template>
