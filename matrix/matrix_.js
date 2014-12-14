@@ -35,21 +35,21 @@ if (Meteor.isClient) {
     }
   });
 
-  // Template.task.events({
-  //   "click .toggle-checked": function () {
-  //     // Set the checked property to the opposite of its current value
-  //     Tasks.update(this._id, {$set: {checked: ! this.checked}});
-  //   },
-  //   "click .delete": function () {
-  //     Tasks.remove(this._id);
-  //   }
-  // });
-  Template.inputMatrix.helpers ({
-    "inputMatrix": function() {
-      var i;
-      for (i = 0; i &lt matrix.row; i++) {
-        <input type="text" name="rowi" placeholder="rows" />
-      }
+  Template.task.events({
+    "click .toggle-checked": function () {
+      // Set the checked property to the opposite of its current value
+      Tasks.update(this._id, {$set: {checked: ! this.checked}});
+    },
+    "click .delete": function () {
+      Tasks.remove(this._id);
+    }
+  });
+  // Template.inputMatrix.helpers ({
+  //   "inputMatrix": function() {
+  //     var i;
+  //     for (i = 0; i &lt matrix.row; i++) {
+  //       <input type="text" name="rowi" placeholder="rows" />
+  //     }
     }
 
   });
