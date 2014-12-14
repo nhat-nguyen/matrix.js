@@ -17,13 +17,13 @@
 
     <ul>
       {{#each matrix}}
-        {{> inputMatrix}}
+        {{> task}}
       {{/each}}
     </ul>
   </div>
 </body>
 
-<template name="inputMatrix">
+<template name="task">
   <li class="{{#if checked}}checked{{/if}}">
     <button class="delete">&times;</button>
 

@@ -50,7 +50,5 @@ if (Meteor.isClient) {
   //     for (i = 0; i &lt matrix.row; i++) {
   //       <input type="text" name="rowi" placeholder="rows" />
   //     }
-    }
-
-  });
+  // }
 }
