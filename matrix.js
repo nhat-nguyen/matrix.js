@@ -61,16 +61,6 @@ function replaceColumn(a, j, b) {
 	return c;
 }
 
-// add a row 
-function expandColumn(a) {
-
-}
-
-function expandRow(a) {
-
-}
-
-
 function addMatrix(a, b) {
     if (a.row != b.row || a.col != b.col)
     	return;
@@ -109,42 +99,58 @@ function multiplyMatrix(a, b) {
 	return c;
 }
 
-// reduces a matrix to its REF form
-// uses Gauss elimination method
-// modifies a in-place
-
-function reduceREF(a) {
-	var i, j, stop = Math.min(a.row, a.col);
-	var k, l, n, x, y, count = 0;
-	for (j = 0; j < stop; j++) {
-		for (i = 0; i == 0 && i < a.row; i++);
-		if (i > j) {
-			swapRow(a, i, j);
-		}
-		for (i = j + 1; i < a.row; i++) {
-			count = 0;
-			n = a.value[i][j] / a.value[j][j]; console.log(n);
-			while (count < n) {
-				for (x = 0; x < a.row; x++)
-					a.value[i][x] -= a.value[j][x];
-				count++;
-			}
-		}
-	}
-}
-
 // swap row #m and row #n of the matrix
+// returns 1 if the switch operations is performed
+// 0 otherwise
 
 function swapRow(a, m, n) {
 	var i, temp;
-	if (m - n) {
-		console.log("Swap row", m, n);
+	if (m != n) {
 		for (i = 0; i < a.col; i++) {
 			temp = a.value[m][i];
 			a.value[m][i] = a.value[n][i];
 			a.value[n][i] = temp;
 		}
+		return 1;
 	}
+	return 0;
+}
+
+// reduces a matrix to its REF form
+// uses Gauss elimination method
+// modifies A in-place
+// no decimal numbers handling method is currently used
+// so the result might be slightly off
+
+function reduceREF(a) {
+	var row, col = 0, last_leading_row = 0,
+		eliminated_row, eliminated_col, n,
+		// the number of switch rows operations
+		// used to determine the determinant later if needed
+		switchCount = 0;
+	while (last_leading_row < a.row && col < a.col) {
+		for (row = last_leading_row; row < a.row; row++) {
+			// makes sure this works properly with decimal
+			if (Math.abs(a.value[row][col]) > 0.0001) {
+				// swaps the row with leading non-zero entry to
+				// the current row
+				switchCount += swapRow(a, last_leading_row, row);
+				// loops through all rows below
+				// eliminates all leading entries
+				for (eliminated_row = last_leading_row + 1; eliminated_row < a.row; eliminated_row++) {
+					// the multiple of the current row's leading entry with respect to 
+					// that of the last leading row
+					n = a.value[eliminated_row][col] / a.value[last_leading_row][col];
+					for (eliminated_col = col; eliminated_col < a.col; eliminated_col++) {
+						a.value[eliminated_row][eliminated_col] -= a.value[last_leading_row][eliminated_col] * n;
+					}
+				}
+				last_leading_row++;
+			}
+		}
+		col++;
+	}
+	return switchCount;
 }
 
 function transpose(a) {
@@ -156,33 +162,45 @@ function transpose(a) {
 	return c;
 }
 
-function determinant(a) {
-	var c = duplicateMatrix(a);
-	reduceREF(c);
+// computes using the REF method
+// it reduces the matrix to the REF first
+// then multiply all the diagonal entries together
+// faster than the Laplace method
 
-	var i = 0, j = 0, det = 1;
+function determinant(a) {
+	var c = duplicateMatrix(a),
+		n = reduceREF(c);
+		i = 0, j = 0, det = 1;
+
 	while (i < c.row)
 		det *= c.value[i++][j++];
-	// console.log(det);
-	return det;
+
+	if (n % 2 == 0) return det;
+	else return -det;
 }
 
 // uses Laplace expansion
 // expands the matrix in a random row or column
+// the complexity is O(n!)
+// considerably slower than the REF method
+// literally stuck when the matrix dimension is over 9x9
 
 function determinantLaplace(a) {
-	// if (a.row != a.col) return; // input must be a square matrix
+	if (a.row != a.col) return; // input must be a square matrix
 
 	if (a.row == 2 && a.col == 2)
-		return a.value[0][0] * a.value[1][1] - a.value[0][1] * a.value[1][0];
+		return a.value[0][0] * a.value[1][1] - 
+				a.value[0][1] * a.value[1][0];
 
-	var row = randint(0 ,2), i = randint(0, a.row), j, det = 0;
+	var i = 0, j, det = 0, detA;
 
 	// recursively compute determinant of the minors
 	for (j = 0; j < a.col; j++) {
-		det += Math.pow(-1, i + j) * a.value[i][j] * determinantLaplace(sliceMatrix(a, i, j));
+		if (a.value[i][j]) {
+			detA = determinantLaplace(sliceMatrix(a, i, j));
+			det += Math.pow(-1, i + j) * a.value[i][j] * detA;
+		}
 	}
-
 	return det;
 }
 
@@ -206,7 +224,8 @@ function cofactorMatrix(a) {
 function inverseLaplace(a) {
 	if (a.row != a.col) return; // input must be a square matrix
 
-	var c = cofactorMatrix(a), i, j = randint(0, a.col), detA = 0;
+	var c = cofactorMatrix(a),
+		i, j = randint(0, a.col), detA = 0;
 
 	// computes the determinant using the cofactor matrix
 	// this can avoid the recalculation of the determinant
@@ -220,7 +239,7 @@ function inverseLaplace(a) {
 		c = transpose(c);
 		// console.log (1 / detA, c);
 	} else {
-		// console.log("Matrix is not invertible.");
+		console.log("Matrix is not invertible.");
 		return;
 	}
 }
@@ -231,7 +250,8 @@ function inverseLaplace(a) {
 // [a | b] is the augmented matrix
 
 function cramerRule(a, b) {
-	var i, j, c, x = Array(a.col), detA = determinant(a);
+	var i, j, c, x = Array(a.col),
+		detA = determinant(a);
 
 	if (detA) {
 		for (i = 0; i < a.col; i++) {

@@ -14,15 +14,12 @@ if (Meteor.isClient) {
     "submit .new-task": function (event) {
       event.preventDefault();
 
-      // This function is called when the new task form is submitted
-
       var r = event.target.row.value;
           c = event.target.col.value;
 
       Tasks.insert({
         row: r,
         col: c,
-        // createdAt: new Date() // current time
       });
 
       // Clear form
@@ -44,11 +41,7 @@ if (Meteor.isClient) {
       Tasks.remove(this._id);
     }
   });
-  // Template.inputMatrix.helpers ({
-  //   "inputMatrix": function() {
-  //     var i;
-  //     for (i = 0; i &lt matrix.row; i++) {
-  //       <input type="text" name="rowi" placeholder="rows" />
-  //     }
-  // }
-}
+
+  Template.task.helpers({
+    
+  });
