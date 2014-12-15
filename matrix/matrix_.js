@@ -16,19 +16,15 @@ if (Meteor.isClient) {
 
       var r = event.target.row.value;
           c = event.target.col.value;
-      var multiply = r*c;
+      var multiply = r * c;
       var m = [];
-      for (var i = 0; i < r*c; i++){
-      	m[i] = i+1;
+      for (var i = 0; i < r * c; i++){
+      	m[i] = i;
       }
       Tasks.insert({
         row: r,
         col: c,
-<<<<<<< HEAD
-        mutiply: mutiply,
-=======
-        mutiply: mutiply;
->>>>>>> 467199f8cbc0b8899140aef481266ed4b8fbcf51
+        multiply: multiply,
         matrix_array: m,
       });
 
@@ -53,12 +49,9 @@ if (Meteor.isClient) {
   });
 
   Template.task.helpers({
-<<<<<<< HEAD
     "hellothere": function() {
-      return multiply % matrix_array == 0 && matrix_array != multiply;
+      console.log("The result of " + this.multiply + " mod " + this.matrix_array + " is " + (this.multiply % (this.matrix_array + 1) == 0));
+      return (this.multiply % (this.matrix_array + 1) == 0);
     }
-=======
-    
->>>>>>> 467199f8cbc0b8899140aef481266ed4b8fbcf51
   });
 }

@@ -33,15 +33,10 @@
       <table>
       <tr>
       {{#each matrix_array}}
-<<<<<<< HEAD
         {{#if hellothere}}
-          <td>a</td><tr></tr>
-=======
-        {{ if multiply % matrix_array == 0 && matrix_array != multiply }}
-          <td>a</td></tr><tr>
->>>>>>> 467199f8cbc0b8899140aef481266ed4b8fbcf51
+          <td>b</td><tr></tr>
         {{else}}
-          <td>a</td>
+          <td>{{this.matrix_array}}</td>
         {{/if}}
       {{/each}}
       </tr>
