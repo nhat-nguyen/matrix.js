@@ -24,7 +24,7 @@ function createMatrix(m, n) {
     return matrix;
 }
 
-// remove row #m and column #n from a matrix
+// removes row #m and column #n from a matrix
 
 function sliceMatrix(a, m, n) {
 	var c = createMatrix(a.row - 1, a.col - 1), k, l, i = 0, j = 0;
@@ -99,8 +99,8 @@ function multiplyMatrix(a, b) {
 	return c;
 }
 
-// swap row #m and row #n of the matrix
-// returns 1 if the switch operations is performed
+// swaps row #m and row #n of the matrix
+// returns 1 if the switch operation is performed
 // 0 otherwise
 
 function swapRow(a, m, n) {
@@ -131,7 +131,7 @@ function reduceREF(a) {
 	while (last_leading_row < a.row && col < a.col) {
 		for (row = last_leading_row; row < a.row; row++) {
 			// makes sure this works properly with decimal
-			if (Math.abs(a.value[row][col]) > 0.0001) {
+			if (Math.abs(a.value[row][col]) > 0.000000001) {
 				// swaps the row with leading non-zero entry to
 				// the current row
 				switchCount += swapRow(a, last_leading_row, row);
@@ -153,6 +153,19 @@ function reduceREF(a) {
 	return switchCount;
 }
 
+// returns the rank of A
+// reduces A to its REF form first
+
+function rank(a) {
+	reduceREF(a);
+	var i = 0, j = 0, r = 0;
+	for (i = 0; i < a.row && j < a.col; i++) {
+		for (; j < a.col && Math.abs(a.value[i][j]) < 0.000000001; j++);
+		if (j < a.col) r++;
+	}
+	return r;
+}
+
 function transpose(a) {
 	var i, j, c = createMatrix(a.col, a.row);
 
@@ -169,7 +182,7 @@ function transpose(a) {
 
 function determinant(a) {
 	var c = duplicateMatrix(a),
-		n = reduceREF(c);
+		n = reduceREF(c),
 		i = 0, j = 0, det = 1;
 
 	while (i < c.row)
