@@ -24,7 +24,11 @@ if (Meteor.isClient) {
       Tasks.insert({
         row: r,
         col: c,
+<<<<<<< HEAD
         mutiply: mutiply,
+=======
+        mutiply: mutiply;
+>>>>>>> 467199f8cbc0b8899140aef481266ed4b8fbcf51
         matrix_array: m,
       });
 
@@ -49,8 +53,12 @@ if (Meteor.isClient) {
   });
 
   Template.task.helpers({
+<<<<<<< HEAD
     "hellothere": function() {
       return multiply % matrix_array == 0 && matrix_array != multiply;
     }
+=======
+    
+>>>>>>> 467199f8cbc0b8899140aef481266ed4b8fbcf51
   });
 }
