@@ -16,10 +16,16 @@ if (Meteor.isClient) {
 
       var r = event.target.row.value;
           c = event.target.col.value;
-
+      var multiply = r*c;
+      var m = [];
+      for (var i = 0; i < r*c; i++){
+      	m[i] = i+1;
+      }
       Tasks.insert({
         row: r,
         col: c,
+        mutiply: mutiply,
+        matrix_array: m,
       });
 
       // Clear form
@@ -43,5 +49,8 @@ if (Meteor.isClient) {
   });
 
   Template.task.helpers({
-    
+    "hellothere": function() {
+      return multiply % matrix_array == 0 && matrix_array != multiply;
+    }
   });
+}
