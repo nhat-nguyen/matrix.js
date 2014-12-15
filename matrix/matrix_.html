@@ -30,8 +30,17 @@
     <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
 
     <span class="text">
-      {{row}}
-      {{col}}
+      <table>
+      <tr>
+      {{#each matrix_array}}
+        {{ if multiply % matrix_array == 0 && matrix_array != multiply }}
+          <td>a</td></tr><tr>
+        {{else}}
+          <td>a</td>
+        {{/if}}
+      {{/each}}
+      </tr>
+      </table>
     </span>
   </li>
 </template>
