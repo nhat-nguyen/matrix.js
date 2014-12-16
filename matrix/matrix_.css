@@ -69,17 +69,23 @@ form {
 }
 
 ul {
-  margin: 0;
-  padding: 0;
+  /*margin: 0;*/
+  padding-top: 10px;
+  border-color: white;
+}
+
+ul .matrix {
+  padding-bottom: 10px;
 }
 
 .delete {
+  position: relative;
   float: right;
   font-weight: bold;
   background: none;
   font-size: 1em;
   border: none;
-  position: relative;
+  color: white;
 }
 
 li {
@@ -91,14 +97,6 @@ li {
 
 li .text {
   margin-left: 10px;
-}
-
-li.checked {
-  color: #888;
-}
-
-li.checked .text {
-  text-decoration: line-through;
 }
 
 li.private {
@@ -127,4 +125,10 @@ header .hide-completed {
   .new-task input {
     padding-bottom: 5px;
   }
+}
+
+table, tr, td {
+   border: 1px solid white;
+   border-collapse: collapse;
+   padding: 10px;
 }

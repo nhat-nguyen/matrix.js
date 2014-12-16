@@ -1,7 +1,5 @@
-<!-- simple-todos.html -->
 <head>
-  <link href="simple-todos.css" rel="stylesheet">
-  <title>Todo List</title>
+  <title>Matrix Calculator</title>
 </head>
 
 <body>
@@ -14,33 +12,21 @@
       <input type="submit" value="Add Matrix">
     </form>
   </header>
-
     <ul>
+      <li>
       {{#each matrix}}
-        {{> task}}
+        {{>createInput}}
       {{/each}}
+      </li>
     </ul>
   </div>
 </body>
 
-<template name="task">
-  <li class="{{#if checked}}checked{{/if}}">
-    <button class="delete">&times;</button>
-
-    <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
-
-    <span class="text">
-      <table>
-      <tr>
-      {{#each matrix_array}}
-        {{#if hellothere}}
-          <td>b</td><tr></tr>
-        {{else}}
-          <td>{{this.matrix_array}}</td>
-        {{/if}}
-      {{/each}}
-      </tr>
-      </table>
-    </span>
+<template name="createInput">
+  <li class="hello">
+    <button class="delete">Delete</button>
+    <div class="matrix" id="newmatrix">
+      {{addTable}}
+    </div>
   </li>
 </template>
