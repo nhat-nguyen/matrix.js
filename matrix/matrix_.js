@@ -31,7 +31,6 @@ if (Meteor.isClient) {
   Template.createInput.helpers({
     addTable: function() {
       var matrix = document.getElementById("newmatrix");
-
       var table = document.createElement('TABLE');
       table.border='1';
       
@@ -44,6 +43,7 @@ if (Meteor.isClient) {
          
          for (var j = 0; j < this.col; j++){
              var td = document.createElement('TD');
+             td.setAttribute("contenteditable",true)
              td.width='5';
              td.appendChild(document.createTextNode(i + "," + j));
              tr.appendChild(td);
