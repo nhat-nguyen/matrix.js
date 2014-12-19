@@ -13,7 +13,7 @@
     </form>
   </header>
     <ul>
-      <li>
+      <li id="matrix-here">
       {{#each matrix}}
         {{>createInput}}
       {{/each}}
@@ -25,7 +25,7 @@
 <template name="createInput">
   <li class="hello">
     <button class="delete">Delete</button>
-    <div class="matrix" id="newmatrix">
+    <div class="matrix">
       {{addTable}}
     </div>
   </li>

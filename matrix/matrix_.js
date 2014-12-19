@@ -30,7 +30,7 @@ if (Meteor.isClient) {
   });
   Template.createInput.helpers({
     addTable: function() {
-      var matrix = document.getElementById("newmatrix");
+      var matrix = document.getElementById("matrix-here");
       var table = document.createElement('TABLE');
       table.border='1';
       
