@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html ng-app='matrixCalc'>
+  <head>
+	  <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+	  <script type="text/javascript" src="angular.min.js"></script>
+	  <script type="text/javascript" src="app.js"></script>
+  </head>
+  <body ng-controller="DisplayController as display">
+
+    <h1>Matrix Calculator</h1>
+    <div class="input">
+	    <form name="newMatrix" ng-controller="MatricesController as matrixCtrl" ng-submit="matrixCtrl.addMatrix()">
+
+    	  <h4>Row</h4>
+    	  <fieldset class="form-group">
+    	    <select ng-model=" matrixCtrl.matrix.row" class="form-control" ng-options="i for i in [1,2,3,4,5,6,7,8,9,10]" title="Row">
+    	      <option value>Number of Rows</option>
+    	    </select>
+    	  </fieldset>
+
+    	  <h4>Column</h4>
+    	  <fieldset class="form-group">
+    	    <select ng-model="matrixCtrl.matrix.col" class="form-control" ng-options="i for i in [1,2,3,4,5,6,7,8,9,10]" title="Column">
+    	      <option value>Number of Columns</option>
+    	    </select>
+    	  </fieldset>
+
+    	  <fieldset class="form-group">
+    	    <input type="submit" class="btn btn-primary pull-right" value="Add Matrix" />
+    	  </fieldset>
+    </div>
+
+	<div ng-repeat="matrix in display.matrices" class="{{matrix.id}}"id="{{matrix.id}}">
+		<table style="width:100%">
+		  <tr ng-repeat="i in [] | range: matrix.row">
+		    <td ng-repeat="j in [] | range: matrix.col">
+		    	<input type="text" name="{{i}}, {{j}}" size="5" maxlength="10" />
+		    </td>
+		  </tr>
+		</table>
+	</div>
+
+  </body>
+</html>
