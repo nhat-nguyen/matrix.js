@@ -61,7 +61,7 @@
 			} else {
 				this.convertFraction(this.matrices[0]);
 				temp = duplicateMatrix(this.matrices[0]);
-				switchCount = reduceREF(temp);
+				simplifyRREF(temp);
 			}
 			temp.id = counter_result++;
 			this.results.push(temp);
@@ -177,6 +177,13 @@ function multiplyFraction(f1, f2) {
 	return simplifyFraction(f3);
 }
 
+function divideFraction(f1, f2) {
+	var f3 = createFraction();
+	f3.a = f1.a * f2.b;
+	f3.b = f1.b * f2.a;
+	return simplifyFraction(f3);
+}
+
 // creates a matrix object that has a 2d array
 // for values and information of its dimension
 
@@ -289,20 +296,13 @@ function swapRow(a, m, n) {
 	return 0;
 }
 
-function divideFraction(f1, f2) {
-	var f3 = createFraction();
-	f3.a = f1.a * f2.b;
-	f3.b = f1.b * f2.a;
-	return f3;
-}
-
 // reduces a matrix to its REF form
 // uses Gauss elimination method
 // modifies A in-place
 // no decimal numbers handling method is currently used
 // so the result might be slightly off
 
-function reduceREF(a) {
+function simplifyREF(a) {
 	var row, col = 0, last_leading_row = 0,
 		eliminated_row, eliminated_col, n,
 		// the number of switch rows operations
@@ -334,15 +334,34 @@ function reduceREF(a) {
 	return switchCount;
 }
 
+function simplifyRREF(a) {
+	var m, n, i, j, k = 0, l, multiple;
+	// reduces to REF first
+	simplifyREF(a);
+	for (m = 0; m < a.row; m++) {
+		for (n = m + 1; n < a.row; n++) {
+			for (i = 0; i < a.col && !(a.value[n][i].a); i++);
+			if (i < a.col && a.value[m][i].a) {
+				multiple = divideFraction(a.value[n][i], a.value[m][i]);
+				for (j = 0; j < a.col; j++)
+					a.value[m][j] = subtractFraction(multiplyFraction(a.value[m][j], multiple), a.value[n][j]);
+			}
+		}
+		for (; k < a.col && !(a.value[m][k].a); k++);
+		for (j = k + 1; j < a.col; j++)
+			a.value[m][j] = divideFraction(a.value[m][j], a.value[m][k]);
+		if (k < a.col) a.value[m][k].a = a.value[m][k].b = 1;
+	}
+}
 
 // returns the rank of A
 // reduces A to its REF form first
 
 function rank(a) {
-	reduceREF(a);
+	simplifyREF(a);
 	var i = 0, j = 0, r = 0;
 	for (i = 0; i < a.row && j < a.col; i++) {
-		for (; j < a.col && !(a.value[i][j]); j++);
+		for (; j < a.col && !(a.value[i][j].a); j++);
 		if (j < a.col) r++;
 	}
 	return r;
@@ -363,7 +382,7 @@ function transpose(a) {
 // faster than the Laplace method
 
 function determinant(a) {
-	var n = reduceREF(a),
+	var n = simplifyREF(a),
 		i = 0, j = 0, det = createFraction();
 	det.a = 1;
 	while (i < a.row)
