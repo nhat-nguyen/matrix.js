@@ -1,6 +1,7 @@
 matrix.js
 =========
 A matrix calculator app written in Javascript using AngularJS
+
 Current features:
 
 * Handle basic operations (addition, subtraction, multiplication)
