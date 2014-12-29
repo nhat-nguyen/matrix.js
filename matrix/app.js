@@ -1,7 +1,7 @@
-(function() {
-	var app = angular.module('matrixCalc', []);
-	var matrices = [], operations = [];
-	var counter = 0, counter_result = 0;
+(function () {
+	var app = angular.module('matrixCalc', []),
+        matrices = [], operations = [],
+        counter = 0, counter_result = 0;
 
 	app.filter('range', function() {
 	  return function(input, total) {
@@ -61,7 +61,7 @@
 			} else {
 				this.convertFraction(this.matrices[0]);
 				temp = duplicateMatrix(this.matrices[0]);
-				simplifyRREF(temp);
+				simplifyREF(temp);
 			}
 			temp.id = counter_result++;
 			this.results.push(temp);
@@ -96,6 +96,12 @@
 			temp.det = duplicateFraction(result);
 			temp.showDet = 1;
 			this.results.push(temp);
+		};
+
+		this.inverse = function(matrix) {
+			this.convertFraction(matrix);
+			var result = inverse(matrix);
+			this.results.push(result);
 		};
     });
 })();
@@ -188,15 +194,22 @@ function divideFraction(f1, f2) {
 // for values and information of its dimension
 
 function createMatrix(m, n) {
-    if (m <= 0 || n <= 0) return;
-
+    // if (m <= 0 || n <= 0) return;
     var matrix = { value: new Array(m), row: m, col: n }, i, j;
     for (i = 0; i < m; i++) {
-        matrix.value[i]= new Array(n)
-        for (j = 0; j < n; j++)
-            matrix.value[i][j] = createFraction();
+        matrix.value[i]= new Array(n);
+        for (j = 0; j < n; j++) {
+        	matrix.value[i][j] = createFraction();
+        }
     }
     return matrix;
+}
+
+function printMatrix(a) {
+	var i, j;
+	for (i = 0; i < a.row; i++)
+		for (j = 0; j < a.col; j++)
+			console.log(a.value[i][j].a + "/" + a.value[i][j].b);
 }
 
 // removes row #m and column #n from a matrix
@@ -266,6 +279,7 @@ function multiplyMatrix(a, b) {
     if (a.col != b.row) return;
 
 	var c = createMatrix(a.row, b.col), i, j, k;
+	console.log(c);
 
 	for (i = 0; i < a.row; i++) {
 		for (k = 0; k < b.col; k++) {
@@ -302,19 +316,24 @@ function swapRow(a, m, n) {
 // no decimal numbers handling method is currently used
 // so the result might be slightly off
 
-function simplifyREF(a) {
+function simplifyREF(a, b) {
 	var row, col = 0, last_leading_row = 0,
 		eliminated_row, eliminated_col, n,
 		// the number of switch rows operations
 		// used to determine the determinant later if needed
-		switchCount = 0;
-	while (last_leading_row < a.row && col < a.col) {
+		switchCount = 0, stop;
+
+	if (b !== undefined) stop = b;
+	else stop = a.col;
+
+	while (last_leading_row < a.row && col < stop) {
 		for (row = last_leading_row; row < a.row; row++) {
 			// makes sure this works properly with decimal
 			if (a.value[row][col].a) {
 				// swaps the row with leading non-zero entry to
 				// the current row
 				switchCount += swapRow(a, last_leading_row, row);
+
 				// loops through all rows below
 				// eliminates all leading entries
 				for (eliminated_row = last_leading_row + 1; eliminated_row < a.row; eliminated_row++) {
@@ -334,24 +353,71 @@ function simplifyREF(a) {
 	return switchCount;
 }
 
-function simplifyRREF(a) {
-	var m, n, i, j, k = 0, l, multiple;
+function simplifyRREF(a, b) {
+	var m, n, i, j, k = 0, l, multiple, stop;
+
 	// reduces to REF first
-	simplifyREF(a);
+	if (b !== undefined) {
+		stop = b;
+		simplifyREF(a, b);
+	}
+	else {
+		stop = a.col;
+		simplifyREF(a);
+	}
+
+	// loop through each row then eliminate every element
+	// after the leading element by subtract the current row
+
+	// with every lower row
 	for (m = 0; m < a.row; m++) {
 		for (n = m + 1; n < a.row; n++) {
-			for (i = 0; i < a.col && !(a.value[n][i].a); i++);
-			if (i < a.col && a.value[m][i].a) {
+			for (i = 0; i < stop && !(a.value[n][i].a); i++);
+
+			// if the element to be eliminated is not 0
+			// then start the elimination
+			if (i < stop && a.value[m][i].a) {
 				multiple = divideFraction(a.value[n][i], a.value[m][i]);
 				for (j = 0; j < a.col; j++)
 					a.value[m][j] = subtractFraction(multiplyFraction(a.value[m][j], multiple), a.value[n][j]);
 			}
 		}
+		// make every leading entry become 1
 		for (; k < a.col && !(a.value[m][k].a); k++);
 		for (j = k + 1; j < a.col; j++)
 			a.value[m][j] = divideFraction(a.value[m][j], a.value[m][k]);
 		if (k < a.col) a.value[m][k].a = a.value[m][k].b = 1;
 	}
+}
+
+// expand a matrix by n columns
+// the section expanded is default to the identity matrix
+
+function expandMatrix(a, n) {
+	var b = createMatrix(a.row, a.col + n), i, j;
+	for (i = 0; i < a.row; i++) {
+		for (j = 0; j < a.col; j++) {
+			b.value[i][j] = duplicateFraction(a.value[i][j]);
+		}
+	}
+	for (j = a.col; j < b.col; j++)
+		for (i = 0; i < b.row; i++) {
+			if (j - a.col == i) b.value[i][j].a = 1;
+		}
+	return b;
+}
+
+function inverse(a) {
+	var b = expandMatrix(a, a.col),
+		c = createMatrix(a.row, a.col),
+		i, j;
+	simplifyRREF(b, a.col);
+	for (i = 0; i < b.row; i++) {
+		for (j = a.col; j < b.col; j++) {
+			c.value[i][j - a.col] = duplicateFraction(b.value[i][j]);
+		}
+	}
+	return c;
 }
 
 // returns the rank of A
@@ -367,6 +433,10 @@ function rank(a) {
 	return r;
 }
 
+function basis(m) {
+	
+}
+
 function transpose(a) {
 	var i, j, c = createMatrix(a.col, a.row);
 
@@ -379,7 +449,6 @@ function transpose(a) {
 // computes using the REF method
 // it reduces the matrix to the REF first
 // then multiply all the diagonal entries together
-// faster than the Laplace method
 
 function determinant(a) {
 	var n = simplifyREF(a),
@@ -421,7 +490,7 @@ function determinantLaplace(a) {
 }
 
 // cofactor matrix is a matrix where every value is
-// the result ofthe cofactor expansion
+// the result of the cofactor expansion
 
 function cofactorMatrix(a) {
 	var c = createMatrix(a.row, a.col), i, j;
@@ -484,3 +553,4 @@ function cramerRule(a, b) {
 function printFraction(f) {
 	console.log(f.a, " / ", f.b);
 }
+

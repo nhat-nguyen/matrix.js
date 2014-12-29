@@ -1,27 +1,25 @@
 <!DOCTYPE html>
-<html ng-app='matrixCalc'>
+<html class="full" ng-app='matrixCalc'>
   <head>
 	  <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
     <link rel="stylesheet" href="main.css">
 	  <script type="text/javascript" src="angular.min.js"></script>
 	  <script type="text/javascript" src="app.js"></script>
   </head>
-  <body class="full" ng-controller="MatricesController as matrixCtrl">
-    <h1>Matrix Calculator</h1>
+  
+  <body ng-controller="MatricesController as matrixCtrl">
+    <div class="description">
+      <h1>Matrix</h1>
+    </div>
     <div class="newmatrix">
-      <form name="newMatrix" ng-submit="matrixCtrl.newMatrix()">
+      <form name="newMatrix" ng-submit="newMatrix.$valid && matrixCtrl.newMatrix()" novalidate>
         <fieldset class="form-group">
-          <input ng-model="matrixCtrl.matrix.row" placeholder="Number of Rows" 
-          type="number" class="form-control" ng-options="i for i in [1,2,3,4,5,6,7,8,9,10]" 
-          title="Row">
-          </input>
+          <input type="number" ng-model="matrixCtrl.matrix.row" min="1" max="10" maxlength="2" ng-pattern="/^[0-9]{1,2}$/" placeholder="Number of Rows"
+          type="number" class="form-control" size="35" title="Row" required />
         </fieldset>
 
         <fieldset class="form-group">
-          <input ng-model="matrixCtrl.matrix.col" placeholder="Number of Columns" 
-          type="number" class="form-control" ng-options="i for i in [1,2,3,4,5,6,7,8,9,10]"
-          title="Column">
-          </input>
+          <input type="number" ng-model="matrixCtrl.matrix.col" min="1" max="10" maxlength="2" ng-pattern="/^[0-9]{1,2}$/" placeholder="Number of Columns" type="number" size="35" class="form-control" title="Column" required />
         </fieldset>
 
         <fieldset class="form-group">
@@ -33,30 +31,37 @@
     </div>
 
     <div class="input">
-    	<div ng-repeat="matrix in matrixCtrl.matrices" class="{{matrix.id}}">
+    	<div ng-repeat="matrix in matrixCtrl.matrices" class="matrices">
         <div class="operator">
           <input ng-show="matrix.id >= 1"ng-model="matrix.operation" type="text" placeholder="+, -, *" size="2"></input>
         </div>
         <div class="additional">
           <div class="delete">
             <form name="newMatrix" ng-submit="matrixCtrl.deleteMatrix(matrix)">
-              <input type="submit" class="btn-mini btn-danger pull-right" value="x" />
+              <input type="submit" class="btn-mini btn-danger pull-right" value="[x]" />
             </form>
           </div>
-          <div class="detcompute">
-            <form name="compdet" ng-submit="matrixCtrl.calcDet(matrix)">
+          <div class="determinant">
+            <form ng-submit="matrixCtrl.calcDet(matrix)">
               <input type="submit" class="btn-mini btn-primary pull-right" value="det( )" />
+            </form>
+          </div>
+          <div class="inverse">
+            <form ng-submit="matrixCtrl.inverse(matrix)">
+              <input type="submit" class="btn-mini btn-success pull-right" value="inverse( )" />
             </form>
           </div>
         </div>
         <div class="matrixtable">
+          <form name="element" ng-submit="element.$valid" novalidate>
           <table>
             <tr ng-repeat="i in [] | range: matrix.row">
               <td ng-repeat="j in [] | range: matrix.col" height="50">
-                  <input ng-model="matrix.temp[i][j]" type="text" size="4" maxlength="6" value="matrix.temp[i][j]"/>
+                  <input ng-model="matrix.temp[i][j]" type="text" size="7" maxlength="6" value="matrix.temp[i][j]"/>
               </td>
             </tr>
           </table>
+          </form>
         </div>
       </div>
       <div class="evaluate">
@@ -66,14 +71,15 @@
       </div>
     </div>
 
-    <div class="result">
+    <div class="results" ng-show="matrixCtrl.results.length">
+      <h3>Results</h3>
       <div ng-repeat="result in matrixCtrl.results">
         <div class="matrixtable">
           <table>
             <tr ng-repeat="i in [] | range: result.row">
               <td ng-repeat="j in [] | range: result.col" ng-switch on="result.value[i][j].b" height="50">
-                  <input ng-switch-when="1" type="text" value="{{result.value[i][j].a}}" size="4"></input> 
-                  <input ng-switch-default type="text" value="{{result.value[i][j].a}} / {{result.value[i][j].b}}" size="4"></input>
+                  <input ng-switch-when="1" type="text" value="{{result.value[i][j].a}}" size="7"></input> 
+                  <input ng-switch-default type="text" value="{{result.value[i][j].a}} / {{result.value[i][j].b}}" size="7"></input>
               </td>
             </tr>
           </table>

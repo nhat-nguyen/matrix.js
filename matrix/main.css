@@ -1,13 +1,14 @@
-body {
+.full {
 	background: url("background.jpg") no-repeat center center fixed; 
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
 	background-size: cover;
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	padding-top: 50px;
-	margin: 0;
+}
+
+body {
+	padding-top: 30px;
+	background: none;
 	font-size: 14px;
 	text-align: center;
 	color: white;
@@ -16,11 +17,11 @@ body {
 }
 
 h1 {
-	font-weight: lighter;
+	font-weight: 100;
 }
 
-.matrixtable {
-	padding-top: 30px;
+h3 {
+	font-weight: 100;
 }
 
 table {
@@ -49,11 +50,44 @@ td {
 	height: 3em;
 }
 
-.input .detcompute input {
+/*makes input width shorter*/
+.form-group {
+	padding-left: 200px;
+	padding-right: 200px;
+}
+
+.description {
+	padding-bottom: 15px;
+}
+
+/*changes border to red when input is invalid*/
+.ng-invalid .ng-dirty {
+  border-color: red;
+}
+
+/*changes border to green when input is valid*/
+.ng-valid .ng-dirty {
+  border-color: lightgreen;
+}
+
+.matrixtable {
+	padding-top: 30px;
+}
+
+.results {
+	padding-bottom: 50px;
+}
+
+/*makes the input height work in IE*/
+.input .determinant input {
 	height: 2em;
 }
 
 .input .delete input {
+	height: 2em;
+}
+
+.input .inverse input {
 	height: 2em;
 }
 
