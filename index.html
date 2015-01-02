@@ -103,8 +103,8 @@
                   </form>
                 </div>
               </div>
-              <div class="matrixtable">
-                <form name="element" ng-submit="element.$valid" novalidate>
+              <div class="matrixtable" ng-switch on="matrix.value.length">
+                <form ng-switch-when="0" name="element" ng-submit="element.$valid" novalidate>
                   <table>
                     <tr ng-repeat="i in [] | range: matrix.row">
                       <td ng-repeat="j in [] | range: matrix.col" height="50">
