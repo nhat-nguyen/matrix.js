@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html class="full" ng-app='matrixCalc'>
+  <head>
+	  <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+    <link rel="stylesheet" href="main.css">
+	  <script type="text/javascript" src="angular.min.js"></script>
+	  <script type="text/javascript" src="app.js"></script>
+  </head>
+  
+  <body ng-controller="MatricesController as matrixCtrl">
+    <div class="description">
+      <h1>Matrix</h1>
+    </div>
+    <div class="matrices">
+      <form name="newMatrix" ng-submit="newMatrix.$valid && matrixCtrl.newMatrix()" novalidate>
+        <fieldset class="form-group">
+          <input type="number" ng-model="matrixCtrl.matrix.row" min="1" max="10" maxlength="2" ng-pattern="/^[0-9]{1,2}$/" placeholder="Number of Rows"
+          type="number" class="form-control" size="35" title="Row" required />
+        </fieldset>
+
+        <fieldset class="form-group">
+          <input type="number" ng-model="matrixCtrl.matrix.col" min="1" max="10" maxlength="2" ng-pattern="/^[0-9]{1,2}$/" placeholder="Number of Columns" type="number" size="35" class="form-control" title="Column" required />
+        </fieldset>
+
+        <fieldset class="form-group">
+          <div class="text-center">
+            <input type="submit" class="btn btn-primary" value="Add Matrix" />
+          </div>
+        </fieldset>
+      </form>
+    </div>
+
+    <div class="input">
+      <div class="text-center" ng-show="matrixCtrl.matrices.length">
+        <h3 ng-show="matrixCtrl.matrices.length">Input</h3>
+        <form name="clear" ng-submit="matrixCtrl.clearMatrices()">
+          <input type="submit" class="btn-mini btn-danger" value="[Clear All]" />
+        </form>
+      </div>
+      <div ng-repeat="matrix in matrixCtrl.matrices" class="matrices">
+        <div class="operator">
+          <input ng-show="matrix.id >= 1 && matrixCtrl.showOperator(matrix)" ng-model="matrix.operation" type="text" placeholder="+, -, *" size="2"/>
+        </div>
+        <div ng-controller="OperationsController as opCtrl" class="operations">
+          <form name="delete" ng-submit="matrixCtrl.deleteMatrix(matrix)">
+            <input type="submit" class="btn-mini btn-danger" value="[x]" />
+          </form>
+          <form name="determinant" ng-submit="opCtrl.determinant(matrix)">
+            <input type="submit" class="btn-mini btn-primary" value="det( )" />
+          </form>
+          <form name="inverse" ng-submit="opCtrl.inverse(matrix)">
+            <input type="submit" class="btn-mini btn-info" value="inverse( )" />
+          </form>
+        </div>
+        <div class="matrixtable" ng-switch on="matrix.value.length">
+          <form ng-switch-when="0" name="element" ng-submit="element.$valid" novalidate>
+            <table>
+              <tr ng-repeat="i in [] | range: matrix.row">
+                <td ng-repeat="j in [] | range: matrix.col" height="50">
+                    <input ng-model="matrix.temp[i][j]" type="text" size="7" maxlength="6" value="{{matrix.temp[i][j]}}"/>
+                </td>
+              </tr>
+            </table>
+          </form>
+          <form ng-switch-default name="element" ng-submit="element.$valid" novalidate>
+            <table>
+              <tr ng-repeat="i in [] | range: matrix.row">
+                <td ng-repeat="j in [] | range: matrix.col" ng-switch on="matrix.value[i][j].b" height="50">
+                    <input ng-switch-when="1" type="text" value="{{matrix.value[i][j].a}}" size="7"></input> 
+                    <input ng-switch-default type="text" value="{{matrix.value[i][j].a}}/{{matrix.value[i][j].b}}" size="7"></input>
+                </td>
+              </tr>
+            </table>
+          </form>
+        </div>
+      </div>
+      <div class="evaluate">
+        <form name="matrixValue" ng-submit="matrixCtrl.compute()" style="width:100%">
+          <input ng-show="matrixCtrl.matrices.length" style="text-center" type="submit" class="btn btn-primary" value="=" />
+        </form>
+      </div>
+    </div>
+
+    <div class="results" ng-show="matrixCtrl.results.length">
+      <h3>Results</h3>
+      <div class="text-center">
+        <form name="clear" ng-submit="matrixCtrl.clearResults()">
+          <input type="submit" class="btn-mini btn-danger" value="[Clear All]" />
+        </form>
+      </div>
+      <div ng-repeat="result in matrixCtrl.results">
+        <div class="copy">
+          <form name="delete" ng-submit="matrixCtrl.deleteResult(result)">
+            <input type="submit" class="btn-mini btn-danger" value="[x]" />
+          </form>
+          <form name="copyInput" ng-submit="matrixCtrl.copyToInput(result)">
+            <input type="submit" class="btn-mini btn-success pull-right" value="Use as input" />
+          </form>
+        </div>
+        <div class="matrixtable">
+          <table>
+            <tr ng-repeat="i in [] | range: result.row">
+              <td ng-repeat="j in [] | range: result.col" ng-switch on="result.value[i][j].b" height="50">
+                  <input ng-switch-when="1" type="text" value="{{result.value[i][j].a}}" size="7"></input> 
+                  <input ng-switch-default type="text" value="{{result.value[i][j].a}}/{{result.value[i][j].b}}" size="7"></input>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="det" ng-show="result.showDet" ng-switch on="result.det.b">
+          <p ng-switch-when="1">determinant: {{result.det.a}}</p> 
+          <p ng-switch-default>determinant: {{result.det.a}}/{{result.det.b}}</p>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>

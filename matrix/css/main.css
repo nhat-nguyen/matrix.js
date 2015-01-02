@@ -1,0 +1,236 @@
+.full {
+	background: url("../assets/background.jpg") no-repeat center center fixed; 
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+
+.navbar {
+	background: none;
+	border: none;
+	padding-bottom: 10px;
+}
+
+.navbar .container .navbar-header a:hover{
+	text-shadow: 0px 0px 10px #006699;
+	color: white;
+}
+
+.navbar .container .navbar-header img {
+	height: 30px;
+	float: left;
+	padding-right: 5px;
+}
+
+.navbar .container .navbar-collapse a{
+	color: white;
+}
+
+.navbar .navbar-collapse a:hover, 
+.navbar .navbar-collapse a:focus {
+	background-color: transparent;
+}
+
+.navbar .container a{
+	color: white;
+}
+
+.navbar .container .navbar-collapse a:link{
+	text-shadow: 0px 0px 5px black;
+	color: white;
+}
+
+.navbar .container .navbar-collapse a:hover{
+	text-shadow: 0px 0px 10px #006699;
+	color: white;
+}
+
+
+.dropdown-menu {
+	min-width: 50px !important;
+}
+
+.btn-group button:hover, .btn-group button:focus {
+	color: white;
+	background-color: rgba(255,255,255,0.2);
+}
+
+body {
+   overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight: 100;
+}
+
+body {
+	padding-bottom: 30px;
+	background: none;
+	font-size: 14px;
+	text-align: center;
+	color: white;
+	font-weight: 200;
+	text-shadow: 0px 0px 15px black;
+	text-align: center;
+}
+
+.matrices .btn {
+	background: none;
+	border: 1px solid white;
+	outline: none;
+}
+
+.operations input:hover, .copy input:hover {
+	background-color: rgba(255,255,255,0.2);
+}
+
+.operations, .copy {
+	border: 1px solid rgb(255, 255, 255);
+	border: 1px solid rgba(255, 255, 255, 0.4);
+	font-weight: 200;
+}
+
+.title input {
+	background: none;
+	border: 1px solid rgb(255, 255, 255);
+	border: 1px solid rgba(255, 255, 255, 0.4);
+	font-weight: 200;
+}
+
+.title input:hover {
+	background-color: rgba(255,255,255,0.3);
+}
+
+.title input {
+	height: 2em;
+}
+
+.input {
+	padding-right: 5px;
+}
+
+td :hover {
+	background-color: rgba(255,255,255,0.1);
+}
+
+.matrixtable input:focus {
+	background-color: rgba(255,255,255,0.3);
+	outline: none;
+}
+
+table {
+	margin: 0 auto;
+	clear: both;
+}
+
+table, tr, td {
+	border: 1px solid rgb(255, 255, 255);
+	border: 1px solid rgba(255, 255, 255, 0.8);
+	border-collapse: collapse;
+	background: none;
+}
+
+textarea {
+	text-align: center; 
+}
+
+input {
+	text-align: center;
+	background: none;
+	border: none;
+	height: 3em;
+}
+
+.input {
+	padding-left: 90px;
+	padding-right: 90px;
+}
+
+.results {
+	padding-right: 90px;
+	padding-left: 90px;
+
+}
+
+td {
+	height: 3em;
+}
+
+.operations input {
+	height: 1.8em;
+
+}
+
+.copy input {
+	/*height: 3.6em;*/
+}
+
+form, form div {
+	display: inline; 
+}
+
+
+/*makes input width shorter*/
+.form-group {
+	padding-left: 200px;
+	padding-right: 200px;
+}
+
+.description {
+	padding-bottom: 15px;
+}
+
+/*changes border to red when input is invalid*/
+.ng-invalid .ng-dirty {
+  border-color: red;
+}
+
+/*changes border to green when input is valid*/
+.ng-valid .ng-dirty {
+	border-color: lightgreen;
+}
+
+.matrixtable {
+	padding-bottom: 30px;
+	/*border-bottom: 1px solid cyan;*/
+
+}
+
+/*makes the input height work in IE*/
+.input .determinant input {
+	height: 2em;
+}
+
+.input .delete input {
+	height: 2em;
+}
+
+.input .inverse input {
+	height: 2em;
+}
+
+.input .evaluate input {
+	background: none;
+	border: 1px solid white;
+}
+
+.input .evaluate {
+	padding-top: 20px;
+}
+
+.input .matrixtable input {
+	text-shadow: 0px 0px 15px black;
+}
+
+.results .matrixtable input {
+	text-shadow: 0px 0px 15px black;
+}
+
+.results .clear input {
+	height: 2em;
+}
+
+.results .copy input {
+	height: 2em;
+}

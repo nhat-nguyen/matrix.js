@@ -6,6 +6,14 @@
 	background-size: cover;
 }
 
+h1 {
+	font-weight: 100;
+}
+
+h3 {
+	font-weight: 100;
+}
+
 body {
 	padding-top: 30px;
 	background: none;
@@ -14,14 +22,6 @@ body {
 	color: white;
 	font-weight: 200;
 	text-shadow: 0px 0px 15px black;
-}
-
-h1 {
-	font-weight: 100;
-}
-
-h3 {
-	font-weight: 100;
 }
 
 table {
@@ -33,7 +33,6 @@ table, tr, td {
    border-collapse: collapse;
    background: none;
 }
-
 
 textarea {
 	text-align: center; 
@@ -49,6 +48,28 @@ input {
 td {
 	height: 3em;
 }
+
+.operations {
+	padding-right: 200px;
+}
+
+.copy {
+	padding-right: 200px;
+}
+
+.copy input {
+	float: right;
+}
+
+.operations input {
+	float: right;
+	height: 2em;
+}
+
+form, form div {
+	display: inline; 
+}
+
 
 /*makes input width shorter*/
 .form-group {
@@ -74,10 +95,6 @@ td {
 	padding-top: 30px;
 }
 
-.results {
-	padding-bottom: 50px;
-}
-
 /*makes the input height work in IE*/
 .input .determinant input {
 	height: 2em;
@@ -96,13 +113,12 @@ td {
 	border: 1px solid white;
 }
 
-.input .operator input {
-	background: none;
-	border: 1px solid white;
+.input {
+	padding-bottom: 30px;
 }
 
 .input .evaluate {
-	padding-top: 10px;
+	padding-top: 20px;
 }
 
 .input .operator {
@@ -113,6 +129,18 @@ td {
 	text-shadow: 0px 0px 15px black;
 }
 
-.result .matrixtable input {
+.results {
+	padding-bottom: 50px;
+}
+
+.results .matrixtable input {
 	text-shadow: 0px 0px 15px black;
+}
+
+.results .clear input {
+	height: 2em;
+}
+
+.results .copy input {
+	height: 2em;
 }

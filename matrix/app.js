@@ -1,7 +1,7 @@
 (function () {
 	var app = angular.module('matrixCalc', []),
-        matrices = [], operations = [],
-        counter = 0, counter_result = 0;
+        matrices = [], results = [], operations = [],
+        counter = 0, result_counter = 0;
 
 	app.filter('range', function() {
 	  return function(input, total) {
@@ -18,28 +18,35 @@
 
     app.controller("MatricesController", function() {
     	this.matrices = matrices;
-    	this.results = [];
+    	this.results = results;
 
 		this.newMatrix = function() {
-			this.matrix.id = counter;
+			this.matrix.id = counter++;
 			this.matrix.det = createFraction();
 			this.matrix.showDet = 0;
+			console.log(this.matrix.value);
+			console.log(this.matrix.temp);
+
+			this.matrix.value = [];
+			this.matrix.temp = [];
+
 			matrices.push(this.matrix);
-			this.matrix = {};
-			counter++;
+			this.matrix = {}; // clears the input
 		};
 
 		this.convertFraction = function(matrix) {
+			if (!matrix.temp.length) return;
 			var i, j;
 			// add a matrix attribute to the current input
 			matrix.value = Array(matrix.row);
 			for (i = 0; i < matrix.row; i++)
 				matrix.value[i] = Array(matrix.col);
 
-			for (i = 0; i < matrix.row; i++)
+			for (i = 0; i < matrix.row; i++) {
 				for (j = 0; j < matrix.col; j++) {
 					matrix.value[i][j] = readFraction(matrix.temp[i][j]);
 				}
+			}
 		};
 
 		this.compute = function() {
@@ -63,45 +70,64 @@
 				temp = duplicateMatrix(this.matrices[0]);
 				simplifyREF(temp);
 			}
-			temp.id = counter_result++;
-			this.results.push(temp);
+			temp.id = result_counter++;
+			results.push(temp);
 		};
+
+		this.copyToInput = function(matrix) {
+			var temp = duplicateMatrix(matrix);
+			temp.id = counter++;
+			temp.temp = [];
+			matrices.push(temp);
+		}
 
 		this.deleteMatrix = function(matrix) {
 			var i;
-			for (i = matrix.id + 1; i < this.matrices.length; i++) {
+			for (i = matrix.id + 1; i < this.matrices.length; i++)
 				this.matrices[i].id --;
-			}
-			this.matrices.splice(matrix.id, 1);
-			for (i = matrix.id; i == matrix.id && i < this.results.length; i++) {
-				if (this.results[i].id == matrix.id)
-					this.results.splice(i, 1);
-			}
-			console.log(this.results)
+			matrices.splice(matrix.id, 1);
 			counter--;
 		};
 
 		this.deleteResult = function(matrix) {
 			var i;
-			for (i = matrix.id + 1; i < this.matrices.length; i++) {
+			for (i = matrix.id + 1; i < this.results.length; i++)
 				this.results[i].id --;
-			}
-			this.results.splice(matrix.id, 1);
+			results.splice(matrix.id, 1);
 		};
 
-		this.calcDet = function(matrix) {
+		this.clearResults = function() {
+			while (results.length) results.pop();
+			result_counter = 0;
+		};
+
+		this.clearMatrices = function () {
+			while (matrices.length) matrices.pop();
+			counter = 0;
+		};
+
+		this.determinant = function(matrix) {
 			this.convertFraction(matrix);
 			var temp = duplicateMatrix(matrix),
 				result = determinant(temp);
 			temp.det = duplicateFraction(result);
 			temp.showDet = 1;
-			this.results.push(temp);
+			temp.id = result_counter++;
+			results.push(temp);
 		};
 
 		this.inverse = function(matrix) {
 			this.convertFraction(matrix);
 			var result = inverse(matrix);
-			this.results.push(result);
+			result.id = result_counter++;
+			results.push(result);
+		};
+
+		this.showOperator = function(matrix) {
+			console.log(counter);
+			if (counter >= 2)
+				return (matrix.row == this.matrices[matrix.id - 1].col);
+			return 0;
 		};
     });
 })();
@@ -279,7 +305,6 @@ function multiplyMatrix(a, b) {
     if (a.col != b.row) return;
 
 	var c = createMatrix(a.row, b.col), i, j, k;
-	console.log(c);
 
 	for (i = 0; i < a.row; i++) {
 		for (k = 0; k < b.col; k++) {
