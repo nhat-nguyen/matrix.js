@@ -142,7 +142,7 @@
             <input type="submit" class="btn-mini" value="clear"/>
           </form>
         </div>
-          <div ng-repeat="result in matrixCtrl.results">
+          <div ng-repeat="result in matrixCtrl.results.slice().reverse()">
             <div class="copy" style="float:left">
               <form name="copyInput" ng-submit="matrixCtrl.copyToInput(result)">
                 <input type="submit" class="btn-mini pull-left" value="use as input" />

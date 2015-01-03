@@ -94,7 +94,7 @@
 			var result = duplicateMatrix(matrix);
 			result.id = counter_result++;
 
-			simplifyREF(result, matrix.col, results);
+			simplifyREF(result);
 			result.rank = rank(result, 0); result.showRank = 1;
 
 			results.push(result);
@@ -374,7 +374,7 @@ function swapRow(a, m, n) {
 // no decimal numbers handling method is currently used
 // so the result might be slightly off
 
-function simplifyREF(a, b, c) {
+function simplifyREF(a, b) {
 	var row, col = 0, last_leading_row = 0,
 		eliminated_row, eliminated_col, n,
 		// the number of switch rows operations
